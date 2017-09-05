@@ -18,14 +18,14 @@ module TheSortableTreeController
     include DefineVariablesMethod
     def expand_node
       id   = params[:id].to_i
-      return render(nothing: true) unless id
+      return render(body: nil) unless id
       sort = (params[:tree_sort] == 'reversed') ? 'reversed_' : nil
 
       variable, collection, klass = self.the_define_common_variables
       variable  = self.instance_variable_set(variable, klass.find(id))
       @children = variable.children.send("#{sort}nested_set")
 
-      return render(nothing: true) if @children.count.zero?
+      return render(body: nil) if @children.count.zero?
       render layout: false, template: "#{collection}/expand_node"
     end
   end
@@ -39,7 +39,7 @@ module TheSortableTreeController
       prev_id   = params[:prev_id].to_i
       next_id   = params[:next_id].to_i
 
-      return render(nothing: true, status: :no_content) if parent_id.zero? && prev_id.zero? && next_id.zero?
+      return render(body: nil, status: :no_content) if parent_id.zero? && prev_id.zero? && next_id.zero?
 
       variable, collection, klass = self.the_define_common_variables
       variable = self.instance_variable_set(variable, klass.find(id))
@@ -52,7 +52,7 @@ module TheSortableTreeController
         variable.move_to_left_of klass.find(next_id)
       end
 
-      render(nothing: true, status: :ok)
+      render(body: nil, status: :ok)
     end
   end
   
@@ -65,7 +65,7 @@ module TheSortableTreeController
       prev_id   = params[:prev_id].to_i
       next_id   = params[:next_id].to_i
 
-      return render(nothing: true, status: :no_content) if parent_id.zero? && prev_id.zero? && next_id.zero?
+      return render(body: nil, status: :no_content) if parent_id.zero? && prev_id.zero? && next_id.zero?
 
       variable, collection, klass = self.the_define_common_variables
       variable = self.instance_variable_set(variable, klass.find(id))
@@ -78,7 +78,7 @@ module TheSortableTreeController
         variable.move_to_right_of klass.find(next_id)
       end
 
-      render(nothing: true, status: :ok)
+      render(body: nil, status: :ok)
     end
   end
 end
